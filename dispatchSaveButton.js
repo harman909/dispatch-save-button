@@ -1,41 +1,32 @@
 // dispatchSaveButton.js
-console.log("🚀 dispatchSaveButton.js loaded, waiting for footer…");
-
 (function() {
-  const BUTTON_ID = 'lw-dispatch-save-btn';
+  const BUTTON_ID  = 'lw-dispatch-save-btn';
+  // ← your new footer selector:
+  const FOOTER_SEL = 'body > div.legacy-windows-container > div.lwDialogWrapper.ready > div > div > div > div.buttons';
 
   function addSaveButton() {
-    // find the Dispatch Console footer (class may vary slightly)
-    const footer = document.querySelector('.dispatch-footer') ||
-                   document.querySelector('.dispatchFooter');
-
+    const footer = document.querySelector(FOOTER_SEL);
     if (!footer) {
-      // not there yet? try again in 100ms
       return setTimeout(addSaveButton, 100);
     }
-
-    // don’t add twice
     if (document.getElementById(BUTTON_ID)) return;
 
-    // create the Save button
     const btn = document.createElement('button');
-    btn.id = BUTTON_ID;
-    btn.textContent = '💾 Save';
+    btn.id           = BUTTON_ID;
+    btn.textContent  = '💾 Save';
     btn.style.marginLeft = '8px';
-    btn.style.padding = '4px 8px';
-    btn.style.cursor = 'pointer';
+    btn.style.padding    = '4px 8px';
+    btn.style.cursor     = 'pointer';
 
     btn.onclick = () => {
-      // grab the current order ID
       const orderId = window.linnworks?.dispatchConsole?.getCurrentOrderId() || '(unknown)';
-      // TODO: call your save endpoint here…
-      // for now just show a toast:
       window.linnworks.dispatchConsole.notifySuccess(`Order ${orderId} saved!`);
     };
 
     footer.appendChild(btn);
+    console.log('✅ Save button injected');
   }
 
-  // start the script
+  console.log('🚀 dispatchSaveButton.js loaded, waiting for footer…');
   addSaveButton();
 })();
