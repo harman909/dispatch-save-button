@@ -2,15 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dispatch Save‑Button Injector Test</title>
+  <title>Test Dispatch Save Button</title>
+  <style>
+    /* just so we can see the “footer” */
+    .dispatch-footer {
+      background: #eee;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-  <!-- mimic the Linnworks Dispatch Console footer -->
-  <div class="buttons" style="background:#f0f0f0; padding:20px;">
-    <!-- the save‑button script will append into here -->
+  <!-- this div must have class "dispatch-footer" (or ".dispatchFooter") -->
+  <div class="dispatch-footer">
+    <!-- your Save button should appear here -->
   </div>
 
-  <!-- load your injector script from jsDelivr -->
+  <!-- load your injector script -->
   <script src="https://cdn.jsdelivr.net/gh/harman909/dispatch-save-button@main/dispatchSaveButton.js"></script>
 </body>
 </html>
