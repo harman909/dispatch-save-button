@@ -1,45 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Dispatch Console – Save Button</title>
-  <style>
-    /* Simple styling so the button matches Linnworks footer */
-    #lw-save-btn {
-      margin-left: 8px;
-      padding: 6px 12px;
-      background: #007cba;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-  <script>
-    // Wait until the Linnworks dispatch footer is present
-    function waitForFooter() {
-      const footer = document.querySelector('.dispatch‑footer');
-      if (!footer) {
-        return setTimeout(waitForFooter, 100);
-      }
+// dispatchSaveButton.js
+(function() {
+  const BUTTON_ID = 'lw-dispatch-save-btn';
 
-      // Don’t add twice
-      if (document.getElementById('lw-save-btn')) return;
+  function addSaveButton() {
+    // the Dispatch footer container (class name may differ slightly)
+    const footer = document.querySelector('.dispatch-footer') ||
+                   document.querySelector('.dispatchFooter');
 
-      // Create and append the Save button
-      const btn = document.createElement('button');
-      btn.id = 'lw-save-btn';
-      btn.textContent = '💾 Save';
-      btn.addEventListener('click', () => {
-        // Here you can call Linnworks APIs to save changes
-        alert('Save clicked! You can wire up your API call here.');
-      });
-      footer.appendChild(btn);
+    if (!footer) {
+      // try again in 100ms
+      return setTimeout(addSaveButton, 100);
     }
-    waitForFooter();
-  </script>
-</body>
-</html>
+    // already added?
+    if (document.getElementById(BUTTON_ID)) return;
+
+    // create the button
+    const btn = document.createElement('button');
+    btn.id = BUTTON_ID;
+    btn.textContent = '💾 Save';
+    btn.style.marginLeft = '8px';
+    btn.style.padding = '4px 8px';
+    btn.style.cursor = 'pointer';
+    btn.onclick = () => {
+      // get the current order ID (adjust selector if needed)
+      const orderId = window.linnworks && window.linnworks.dispatchConsole
+        ? window.linnworks.dispatchConsole.getCurrentOrderId()
+        : '(unknown)';
+
+      // here’s where you’d call the Linnworks API to save…
+      // For now we’ll just show a toast:
+      window.linnworks.dispatchConsole.notifySuccess(`Order ${orderId} saved!`);
+    };
+
+    footer.appendChild(btn);
+  }
+
+  // kick it off
+  addSaveButton();
+})();
