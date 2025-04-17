@@ -5,8 +5,7 @@ console.log("🚀 dispatchSaveButton.js loaded, waiting for footer…");
   const BUTTON_ID = 'lw-dispatch-save-btn';
 
   function addSaveButton() {
-    const footer = document.querySelector('.dispatch-footer') ||
-                   document.querySelector('.dispatchFooter');
+    const footer = document.querySelector('.buttons');
     if (!footer) return setTimeout(addSaveButton, 100);
     if (document.getElementById(BUTTON_ID)) return;
 
