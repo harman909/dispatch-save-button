@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dispatch Console – Save Button</title>
+  <style>
+    /* Simple styling so the button matches Linnworks footer */
+    #lw-save-btn {
+      margin-left: 8px;
+      padding: 6px 12px;
+      background: #007cba;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Wait until the Linnworks dispatch footer is present
+    function waitForFooter() {
+      const footer = document.querySelector('.dispatch‑footer');
+      if (!footer) {
+        return setTimeout(waitForFooter, 100);
+      }
+
+      // Don’t add twice
+      if (document.getElementById('lw-save-btn')) return;
+
+      // Create and append the Save button
+      const btn = document.createElement('button');
+      btn.id = 'lw-save-btn';
+      btn.textContent = '💾 Save';
+      btn.addEventListener('click', () => {
+        // Here you can call Linnworks APIs to save changes
+        alert('Save clicked! You can wire up your API call here.');
+      });
+      footer.appendChild(btn);
+    }
+    waitForFooter();
+  </script>
+</body>
+</html>
