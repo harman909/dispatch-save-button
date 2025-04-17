@@ -1,40 +1,41 @@
 // dispatchSaveButton.js
-console.log("🚀 dispatchSaveButton.js loaded, waiting for footer + API…");
+(function() {
+  const BUTTON_ID = 'lw-dispatch-save-btn';
 
-(function(){
-  const BUTTON_ID = "lw-dispatch-save-btn";
+  function addSaveButton() {
+    // try all possible footer selectors:
+    const footer =
+         document.querySelector('.dispatch-footer')
+      || document.querySelector('.dispatchFooter')
+      || document.querySelector('.buttons');
 
-  function tryInject() {
-    const footer = document.querySelector(".dispatch-footer") ||
-                   document.querySelector(".dispatchFooter");
-    // is the Dispatch API object present?
-    const api = window.linnworks && window.linnworks.dispatchConsole;
-
-    if (!footer || !api) {
-      // not ready yet → retry
-      return setTimeout(tryInject, 200);
+    if (!footer) {
+      console.log('⏳ SaveInjector: footer not found, retrying…');
+      return setTimeout(addSaveButton, 100);
     }
 
-    // only inject once
+    console.log('🎯 SaveInjector: footer found!', footer);
+
     if (document.getElementById(BUTTON_ID)) return;
-
-    // create & style the button
-    const btn = document.createElement("button");
+    const btn = document.createElement('button');
     btn.id = BUTTON_ID;
-    btn.textContent = "💾 Save";
-    btn.style.margin = "0 8px";
-    btn.style.padding = "4px 8px";
-    btn.style.cursor = "pointer";
-
-    // wire up click _after_ api is ready
-    btn.addEventListener("click", () => {
-      const orderId = api.getCurrentOrderId();
-      api.notifySuccess(`Order ${orderId} saved!`);
-    });
+    btn.textContent = '💾 Save';
+    btn.style.marginLeft = '8px';
+    btn.style.padding    = '4px 8px';
+    btn.style.cursor     = 'pointer';
+    btn.onclick = () => {
+      const orderId = window.linnworks
+        && window.linnworks.dispatchConsole
+          ? window.linnworks.dispatchConsole.getCurrentOrderId()
+          : '(unknown)';
+      window.linnworks.dispatchConsole
+        .notifySuccess(`Order ${orderId} saved!`);
+    };
 
     footer.appendChild(btn);
-    console.log("✅ Save button injected");
+    console.log('✅ SaveInjector: Save button injected');
   }
 
-  tryInject();
+  console.log('🚀 SaveInjector loaded, waiting for footer…');
+  addSaveButton();
 })();
