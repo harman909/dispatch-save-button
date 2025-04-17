@@ -6,9 +6,20 @@
 </head>
 <body>
   <!-- mimic the Linnworks Dispatch Console footer -->
-  <div class="dispatch-footer buttons" style="background:#f0f0f0; padding:20px;">
-    <!-- the save‑button script will append into here -->
+  <div class="buttons dispatch-footer" style="background:#f0f0f0; padding:20px;">
+    <!-- save‑button will get injected here -->
   </div>
+
+  <!-- stub the Linnworks API in your page -->
+  <script>
+    window.linnworks = {
+      dispatchConsole: {
+        getCurrentOrderId() { return 'TEST‑ORDER‑001'; },
+        notifySuccess(msg) { alert(msg); }
+      }
+    };
+    console.log('🛠️ stubbed dispatchConsole for local test');
+  </script>
 
   <!-- load your injector script from jsDelivr -->
   <script src="https://cdn.jsdelivr.net/gh/harman909/dispatch-save-button@main/dispatchSaveButton.js"></script>
