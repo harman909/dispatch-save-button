@@ -1,32 +1,40 @@
 // dispatchSaveButton.js
-(function() {
-  const BUTTON_ID  = 'lw-dispatch-save-btn';
-  // ← your new footer selector:
-  const FOOTER_SEL = 'body > div.legacy-windows-container > div.lwDialogWrapper.ready > div > div > div > div.buttons';
+console.log("🚀 dispatchSaveButton.js loaded, waiting for footer + API…");
 
-  function addSaveButton() {
-    const footer = document.querySelector(FOOTER_SEL);
-    if (!footer) {
-      return setTimeout(addSaveButton, 100);
+(function(){
+  const BUTTON_ID = "lw-dispatch-save-btn";
+
+  function tryInject() {
+    const footer = document.querySelector(".dispatch-footer") ||
+                   document.querySelector(".dispatchFooter");
+    // is the Dispatch API object present?
+    const api = window.linnworks && window.linnworks.dispatchConsole;
+
+    if (!footer || !api) {
+      // not ready yet → retry
+      return setTimeout(tryInject, 200);
     }
+
+    // only inject once
     if (document.getElementById(BUTTON_ID)) return;
 
-    const btn = document.createElement('button');
-    btn.id           = BUTTON_ID;
-    btn.textContent  = '💾 Save';
-    btn.style.marginLeft = '8px';
-    btn.style.padding    = '4px 8px';
-    btn.style.cursor     = 'pointer';
+    // create & style the button
+    const btn = document.createElement("button");
+    btn.id = BUTTON_ID;
+    btn.textContent = "💾 Save";
+    btn.style.margin = "0 8px";
+    btn.style.padding = "4px 8px";
+    btn.style.cursor = "pointer";
 
-    btn.onclick = () => {
-      const orderId = window.linnworks?.dispatchConsole?.getCurrentOrderId() || '(unknown)';
-      window.linnworks.dispatchConsole.notifySuccess(`Order ${orderId} saved!`);
-    };
+    // wire up click _after_ api is ready
+    btn.addEventListener("click", () => {
+      const orderId = api.getCurrentOrderId();
+      api.notifySuccess(`Order ${orderId} saved!`);
+    });
 
     footer.appendChild(btn);
-    console.log('✅ Save button injected');
+    console.log("✅ Save button injected");
   }
 
-  console.log('🚀 dispatchSaveButton.js loaded, waiting for footer…');
-  addSaveButton();
+  tryInject();
 })();
